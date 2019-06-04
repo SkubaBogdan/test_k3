@@ -15,6 +15,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
-
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('register', 'RegistrationController@register');
+Route::post('register', 'RegistrationController@postRegister');
+
+Route::get('register/confirm/{token}', 'RegistrationController@confirmEmail');
+
+Route::get('login', 'SessionsController@login')->middleware('guest');
+Route::post('login', 'SessionsController@postLogin')->middleware('guest');
+Route::get('logout', 'SessionsController@logout');
+
+Route::get('dashboard', ['middleware' => 'auth', function() {
+    return 'Добро пожаловать, '.Auth::user()->name.'!';
+}]);
