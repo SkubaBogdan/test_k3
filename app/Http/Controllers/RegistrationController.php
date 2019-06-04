@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Mail\UserRegistered;
 use Illuminate\Support\Facades\Mail;
+use App\Models\UserRegistrationLog;
 
 
 class RegistrationController extends Controller
@@ -40,6 +41,9 @@ class RegistrationController extends Controller
         $user = User::create($request->all());
 
         Mail::to($user)->send(new UserRegistered($user));
+        UserRegistrationLog::insert([
+            'user' => $user,
+        ]);
 
         $request->session()->flash('message', 'На ваш адрес было выслано письмо с подтверждением регистрации.');
 
